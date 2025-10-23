@@ -1,0 +1,12 @@
+# PySpark for large-scale data processing
+pyspark==3.5.0
+
+# MySQL connector for database operations
+mysql-connector-python==8.2.0
+
+# For reading Excel files (Field Config)
+openpyxl==3.1.2
+
+# Optional: pandas for data analysis and debugging
+pandas==2.1.4
+
