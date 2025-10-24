@@ -106,8 +106,6 @@ def show_relationships(connection):
     """
     
     cursor.execute(query)
-
-    
     rows = cursor.fetchall()
     
     print(f"{'Table':<15} {'Column':<20} {'References':<15} {'Column':<20}")
@@ -142,7 +140,7 @@ def main():
     finally:
         if connection.is_connected():
             connection.close()
-            print("\n✓ MySQL connection closed")
+            print("\nMySQL connection closed")
 
 if __name__ == "__main__":
     main()

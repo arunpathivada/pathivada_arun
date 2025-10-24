@@ -53,13 +53,13 @@ def run_etl():
     
     try:
         result = subprocess.run(cmd, check=True)
-        print("\n✓ ETL pipeline completed successfully!")
+        print("\nETL pipeline completed successfully!")
         return 0
     except subprocess.CalledProcessError as e:
-        print(f"\n✗ ETL pipeline failed with error code: {e.returncode}")
+        print(f"\nETL pipeline failed with error code: {e.returncode}")
         return 1
     except FileNotFoundError:
-        print("\n✗ Error: spark-submit not found. Please install PySpark.")
+        print("\nError: spark-submit not found. Please install PySpark.")
         print("Run: pip install -r requirements.txt")
         return 1
 

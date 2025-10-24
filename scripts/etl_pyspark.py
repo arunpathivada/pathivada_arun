@@ -50,15 +50,15 @@ class PropertyETL:
         """Create and configure Spark session"""
         logger.info("Creating Spark session...")
         
-        self.spark = (SparkSession.builder  # type: ignore
-            .appName("PropertyDataETL")  # type: ignore
+        self.spark = (SparkSession.builder
+            .appName("PropertyDataETL")
             .config("spark.jars", "mysql-connector-j-8.2.0.jar")
             .config("spark.driver.memory", "4g")
             .config("spark.executor.memory", "4g")
             .config("spark.sql.adaptive.enabled", "true")
             .getOrCreate())
         
-        self.spark.sparkContext.setLogLevel("WARN")  # type: ignore[union-attr]
+        self.spark.sparkContext.setLogLevel("WARN")
         logger.info("Spark session created successfully")
         
     def extract_data(self):
@@ -66,7 +66,7 @@ class PropertyETL:
         logger.info(f"Extracting data from {self.json_path}...")
         
         try:
-            df = self.spark.read.option("multiLine", "true").json(self.json_path)  # type: ignore[union-attr]
+            df = self.spark.read.option("multiLine", "true").json(self.json_path)
             
             # Add property_id to raw data for easier joins
             window_spec = Window.orderBy(monotonically_increasing_id())
@@ -83,7 +83,7 @@ class PropertyETL:
         """Transform and create property table dataframe"""
         logger.info("Transforming property data...")
         
-        property_df = self.raw_df.select(  # type: ignore[union-attr]
+        property_df = self.raw_df.select(
             col("property_id"),
             col("Property_Title").alias("property_title"),
             col("Address").alias("address"),
@@ -96,8 +96,6 @@ class PropertyETL:
             col("Latitude").cast(DecimalType(10, 8)).alias("latitude"),
             col("Longitude").cast(DecimalType(11, 8)).alias("longitude"),
             col("Subdivision").alias("subdivision"),
-            
-            # Property characteristics
             col("Year_Built").cast(IntegerType()).alias("year_built"),
             col("Bed").cast(IntegerType()).alias("bed"),
             col("Bath").cast(IntegerType()).alias("bath"),
@@ -107,8 +105,6 @@ class PropertyETL:
             col("BasementYesNo").alias("basement_yes_no"),
             col("Layout").alias("layout"),
             col("Parking").alias("parking"),
-            
-            # Property features
             col("Flood").alias("flood"),
             col("Highway").alias("highway"),
             col("Train").alias("train"),
@@ -117,8 +113,6 @@ class PropertyETL:
             col("Commercial").alias("commercial"),
             col("Water").alias("water"),
             col("Sewage").alias("sewage"),
-            
-            # Financial and location metrics
             col("Tax_Rate").cast(DecimalType(10, 4)).alias("tax_rate"),
             col("Rent_Restricted").alias("rent_restricted"),
             col("Neighborhood_Rating").cast(IntegerType()).alias("neighborhood_rating"),
@@ -132,7 +126,7 @@ class PropertyETL:
         """Transform and create leads table dataframe"""
         logger.info("Transforming leads data...")
         
-        leads_df = self.raw_df.select(  # type: ignore[union-attr]
+        leads_df = self.raw_df.select(
             col("property_id"),
             col("Reviewed_Status").alias("reviewed_status"),
             col("Most_Recent_Status").alias("most_recent_status"),
@@ -152,7 +146,7 @@ class PropertyETL:
         """Transform and create taxes table dataframe"""
         logger.info("Transforming taxes data...")
         
-        taxes_df = self.raw_df.select(  # type: ignore[union-attr]
+        taxes_df = self.raw_df.select(
             col("property_id"),
             col("Taxes").cast(DecimalType(12, 2)).alias("taxes")
         )
@@ -165,7 +159,7 @@ class PropertyETL:
         logger.info("Transforming valuation data...")
         
         # Explode the Valuation array
-        valuation_df = self.raw_df.select(  # type: ignore[union-attr]
+        valuation_df = self.raw_df.select(
             col("property_id"),
             explode(col("Valuation")).alias("valuation_record")
         ).select(
@@ -189,7 +183,7 @@ class PropertyETL:
         logger.info("Transforming HOA data...")
         
         # Explode the HOA array
-        hoa_df = self.raw_df.select(  # type: ignore[union-attr]
+        hoa_df = self.raw_df.select(
             col("property_id"),
             explode(col("HOA")).alias("hoa_record")
         ).select(
@@ -206,7 +200,7 @@ class PropertyETL:
         logger.info("Transforming rehab data...")
         
         # Explode the Rehab array
-        rehab_df = self.raw_df.select(  # type: ignore[union-attr]
+        rehab_df = self.raw_df.select(
             col("property_id"),
             explode(col("Rehab")).alias("rehab_record")
         ).select(
