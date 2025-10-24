@@ -66,7 +66,7 @@ class PropertyETL:
         logger.info(f"Extracting data from {self.json_path}...")
         
         try:
-            df = self.spark.read.json(self.json_path)  # type: ignore[union-attr]
+            df = self.spark.read.option("multiLine", "true").json(self.json_path)  # type: ignore[union-attr]
             
             # Add property_id to raw data for easier joins
             window_spec = Window.orderBy(monotonically_increasing_id())
