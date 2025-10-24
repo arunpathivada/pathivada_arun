@@ -6,7 +6,7 @@
 # 1. Start MySQL
 docker-compose -f docker-compose.initial.yml up --build -d
 
-# 2. Install dependencies
+# 2. Install dependencies to run the project
 pip install -r requirements.txt
 
 # 3. Create database schema

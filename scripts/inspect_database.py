@@ -106,6 +106,8 @@ def show_relationships(connection):
     """
     
     cursor.execute(query)
+
+    
     rows = cursor.fetchall()
     
     print(f"{'Table':<15} {'Column':<20} {'References':<15} {'Column':<20}")
